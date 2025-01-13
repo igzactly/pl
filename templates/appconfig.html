@@ -1,0 +1,204 @@
+{% extends "includes/layout.html" %}
+{% block content %}
+<!-- Advanced login -->
+				
+					<!-- <div class="row">
+                  <div class="col-md-1"></div>
+
+						<div class="col-md-10">
+						   <div class="panel panel-flat">
+							 
+                              <div class="row form-group">
+                                 <div class="page-title">
+                                    Super Admin Application Configuration Panel
+                                 </div>
+                                
+                               
+                                 <input type="checkbox" class="js-switch" checked />
+                                
+                                 <div class="col-md-8 form-group">
+                                    <label for="personNameTb"> Name of the Entity </label> <input class="form-control maxlength" maxlength="10">
+                                 </div>
+                              </div>
+						   </div>
+						</div>
+					 </div> -->
+					 <!-- Modal!-->
+                <div class="row">
+                  <div class="col-md-1"></div>
+                  <div class="col-md-10">
+                <div class="panel panel-body ">
+                  <div class="text-center">
+                     <div class="icon-object border-warning-400 text-warning-400"><i class="icon-gear"></i></div>
+                     <h2 class="content-group-lg display-block">Application Configuration settings </h2>
+                  </div>
+
+                  <div class="form-group has-feedback has-feedback-left">
+                     <input type="text" class="form-control" placeholder="Email or Phone" id="userID">
+                     <div class="form-control-feedback">
+                        <i class="icon-user text-muted" style="margin-top: 10px;"> </i>
+                     </div>
+                  </div>
+
+                  <div class="form-group has-feedback has-feedback-left">
+                     <input type="password" class="form-control" placeholder="Password" id="userPass">
+                     <div class="form-control-feedback">
+                        <i class="icon-lock2 text-muted" style="margin-top: 10px;"></i>
+                     </div>
+                  </div>
+
+                  
+                  <div class="form-group row">
+                     <div class="col-lg-3">
+                        <button class="btn bg-blue btn-block" onclick="doLogin()">Submit <i class="icon-circle-right2 position-right"></i></button>
+                     </div>
+                     <div class="col-lg-3">
+                        <button class="btn bg-orange btn-block " onclick="doLogin()">Reset <i class="icon-circle-right2 position-right"></i></button>
+                     </div>
+                     
+                  </div>
+
+               
+               </div>
+            </div>
+            </div>
+
+{% endblock %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block bodyclass %}
+ pace-done
+{% endblock %}
+{% block scriptblock %}
+
+<script type="text/javascript">
+    event="";
+    $(function(){
+           
+           $('#appConfigLink').addClass('active');
+           getAll();
+          // activating the switch class for all the switch elements
+          var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+          elems.forEach(function(html) {
+          var switchery = new Switchery(html);
+});
+        });
+    function validate(){
+       
+       return true;
+    }
+    function getAll(){
+       var postdata="";
+       postBack("admin/getAllAdmins","postdata="+postdata,function(response){
+             var json=JSON.parse(response);
+             console.log(json);
+             var output=json.data;
+              $("#tableBody").html("");
+               var html = "";
+               for (var i = 0; i < output.length; i++) {
+
+                   var tableData = "<tr>";
+                   tableData += "<td><input id='cb" +output[i][0] + "' type='checkbox' name='selectRow' value='" + output[i][0] + "' style='height:20px;width:20px' />";
+
+                   if (output[i].flag == 1)
+                       tableData += '<span class="label label-flat label-icon text-danger" data-popup="tooltip" data-placement="bottom" title="Deleted" style="float:right; padding-top: 4px;"><i class="icon-trash"></i></span>';
+
+                   tableData += "<td class='nameClass'>" + output[i][1] + "</td>";
+                   tableData += "<td class='phoneClass'>" + output[i][2] + "</td>";
+                   tableData += "<td >" + output[i][3] + "</td>";
+                   
+                   tableData += "</tr>";
+                   $("#tableBody").append(tableData);
+             }
+                applyFilterableList();
+                });
+    }
+    function applyFilterableList() {
+  var options = {
+      valueNames: ['nameClass', 'phoneClass']
+  };
+  var list = new List('entityPanel', options);
+}
+function getEntityDetails() {
+var id = $('input[name=selectRow]:checked:visible:first').val();
+
+if (!id) {
+showErrorMessage("Please select the  you wish to update");
+return false;
+}
+var newObj= new Object();
+newObj.id=id;
+var objArray= new Array();
+objArray.push(newObj);
+$('#entity_modal').modal('show');
+postdata=JSON.stringify(objArray);
+var postdata = JSON.stringify(objArray);
+postBack("admin/getAdminDetails", "postdata=" + postdata, function(response) {
+
+var output = JSON.parse(response);
+$('#nameTb').val(output.data[1]);
+$('#phoneTb').val(output.data[2]);
+$('#emailTb').val(output.data[3]);
+$('#idTb').val(id);
+});
+}
+
+    function submitForm(){
+       
+       if(validate()){
+          var newObj= new Object();
+          var objArray = new Array();
+          newObj.name=$("#nameTb").val();
+          newObj.email=$("#emailTb").val();
+          newObj.phone=$("#phoneTb").val();
+          newObj.id=$("#idTb").val();
+          newObj.privilege_id=1;
+          objArray.push(newObj);
+          console.log(objArray)
+          var postData=JSON.stringify(objArray);
+          if(event=="add"){
+             postBack("admin/addAdmin","postdata="+postData,function(response){
+                console.log(response);
+               var json=JSON.parse(response);
+               if(json.data){
+                   showSuccessMessage(json.message);
+                   resetForm();
+                   closeEntityModal();
+                   getAll();
+               }
+               
+          });
+       }
+       else{
+          console.log(newObj);
+         postBack("admin/updateAdmin","postdata="+postData,function(response){
+                console.log(response);
+               var json=JSON.parse(response);
+               if(json.data){
+                   showSuccessMessage(json.message);
+                   resetForm();
+                   closeEntityModal();
+                   getAll();
+               }
+             });
+     
+    
+       }
+    
+     
+     }
+    }
+
+          
+ 
+
+
+ </script>
+{% endblock %}
+{% block sidebar %}
+{% include "includes/navbar.html" %}
+{% include "includes/sidebar.html" %}
+{% endblock %}

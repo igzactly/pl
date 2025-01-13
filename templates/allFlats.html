@@ -1,0 +1,262 @@
+{% extends "includes/layout.html" %}
+{% block content %}
+<!-- Advanced login -->
+				
+					<div class="row">
+						<div class="col-md-12">
+						   <div class="panel panel-flat">
+							  <div id="entityPanel" class="panel-body">
+								 <div class="form-group">
+									<div class="row">
+									   <div class="col-md-12">
+										  <div class="form-group has-feedback has-feedback-left">
+											 <input type="text" class="search form-control input-lg" placeholder="Search Admin by Phone  / Name ">
+											 <div class="form-control-feedback">
+												<i class="icon-search4" style="margin-top: 10px;"></i>
+											 </div>
+										  </div>
+									   </div>
+									</div>
+								 </div>
+								 <div class="form-group">
+									<div class="row">
+									   <div class="col-md-12">
+										  <table class="table table-bordered table-hover table-condensed table-striped">
+											 <thead class="bg-tomato">
+												<tr>
+												   <th style="width:100px;"></th>
+												   <th>Building </th>
+												   <th>Owner </th>
+												   <th>Flat Name</th>
+												   
+												</tr>
+											 </thead>
+											 <tbody id="tableBody" class="list">
+											 </tbody>
+										  </table>
+									   </div>
+									</div>
+								 </div>
+							  </div>
+						   </div>
+						</div>
+					 </div>
+					 <!-- Modal!-->
+		   <div id="entity_modal" class="modal fade" data-backdrop="static" data-keyboard="false">
+						<div class="modal-dialog modal-md">
+						   <div class="modal-content">
+							  <div class="modal-header bg-maroon">
+								 <button type="button" class="close" onclick="closeEntityModal()">&times;</button>
+								 <h5 id="formTitle" class="modal-title"><span id="actionTb"> </span>Flat</h5>
+							  </div>
+							  <form id="entityForm" action="#" class="form-horizontal">
+								 <div class="modal-body">
+									<div class="form-group">
+										<label class="control-label col-sm-3">Name  <span class="text-danger">*</span></label>
+										<div class="col-sm-9">
+										   <input id="nameTb" type="text" placeholder="Resident Phone" maxlength="20" class="form-control maxlength" >
+										</div>
+									 </div>
+									
+
+								 <div class="form-group">
+									   <label class="control-label col-sm-3">Occupants  <span class="text-danger">*</span></label>
+									   <div class="col-sm-9">
+										  <input id="occupantTb" type="number" placeholder="Resident Phone" maxlength="12" class="form-control maxlength" >
+									   </div>
+									</div>
+									<div class="form-group">
+										<label class="control-label col-sm-3"> Building  <span class="text-danger">*</span></label>
+										<div class="col-sm-9">
+										  <select class="select select2-hidden-accessible" tabindex="-1" aria-hidden="true" id="location_select">
+														
+												  
+										  </select>
+										</div>
+									 </div>
+									<div class="form-group">
+										<label class="control-label col-sm-3"> Owner  <span class="text-danger">*</span></label>
+										<div class="col-sm-9">
+										  <select class="select select2-hidden-accessible" tabindex="-1" aria-hidden="true" id="owner_select">
+												
+										  </select>
+										</div>
+									 </div>
+									
+									
+									
+								 </div>
+								 <div class="modal-footer">
+									<input type="hidden" id="idTb" value="0"/>
+									<button type="reset" class="btn btn-default">Reset Form</button>
+									<button type="button" id="formButton" name="" onclick="submitForm()" class="btn btn-primary">Submit form</button>
+								 </div>
+							  </form>
+						   </div>
+						</div>
+					 </div>
+					 <script type="text/javascript">
+						event="";
+						$(function(){
+							 $("#societyLink").click();
+							   $('#buildingsLink').addClass('active');
+							   getAll();
+							   $('#location_select').select2({});
+							   $('#owner_select').select2({});
+							});
+						function validate(){
+						   
+						   return true;
+						}
+						function getAll(){
+						   postBack("flats/getAllBuildings","postdata="+postdata,function(response){
+							   $("#location_select").html('');
+							   var jsonData = JSON.parse(response);
+							   console.log(jsonData)
+							   var optionsData="";
+							   for(i=0;i<jsonData.data.length;i++){
+								optionsData += "<option value='"+jsonData.data[i][0]+"'>"+jsonData.data[i][1]+"</option>";
+
+							   }
+							   $("#location_select").html(optionsData);
+						   });
+						   postBack("flats/getAllOwners","postdata="+postdata,function(response){
+							   $("#owner_select").html('');
+							   var jsonData = JSON.parse(response);
+							   
+							   var optionsData="";
+							   for(i=0;i<jsonData.data.length;i++){
+								optionsData += "<option value='"+jsonData.data[i][0]+"'>"+jsonData.data[i][1]+"</option>";
+
+							   }
+							   $("#owner_select").html(optionsData);
+							  
+						   });
+						   var postdata="";
+						   postBack("flats/getAllflats","postdata="+postdata,function(response){
+								 var json=JSON.parse(response);
+								 console.log(json);
+								 var output=json.data;
+								  $("#tableBody").html("");
+								   var html = "";
+								   for (var i = 0; i < output.length; i++) {
+		 
+									   var tableData = "<tr>";
+									   tableData += "<td><input id='cb" +output[i][0] + "' type='checkbox' name='selectRow' value='" + output[i][0] + "' style='height:20px;width:20px' />";
+		 
+									   if (output[i].flag == 1)
+										   tableData += '<span class="label label-flat label-icon text-danger" data-popup="tooltip" data-placement="bottom" title="Deleted" style="float:right; padding-top: 4px;"><i class="icon-trash"></i></span>';
+		 
+									   tableData += "<td class='nameClass'>" + output[i][1] + "</td>";
+									   tableData += "<td class='phoneClass'>" + output[i][2] + "</td>";
+									   tableData += "<td class='phoneClass'>" + output[i][3] + "</td>";
+									  
+									   
+									   
+									   tableData += "</tr>";
+									   $("#tableBody").append(tableData);
+								 }
+									applyFilterableList();
+									});
+						}
+						function applyFilterableList() {
+					  var options = {
+						  valueNames: ['nameClass', 'phoneClass']
+					  };
+					  var list = new List('entityPanel', options);
+				  }
+			function getEntityDetails() {
+			var id = $('input[name=selectRow]:checked:visible:first').val();
+				
+			 if (!id) {
+				 showErrorMessage("Please select the  Flat you wish to update");
+				 return false;
+			 }
+			 var newObj= new Object();
+			 newObj.id=id;
+			 var objArray= new Array();
+			 objArray.push(newObj);
+			 $('#entity_modal').modal('show');
+			 postdata=JSON.stringify(objArray);
+			var postdata = JSON.stringify(objArray);
+			 postBack("flats/getflatsDetails", "postdata=" + postdata, function(response) {
+		 
+				 var output = JSON.parse(response);
+				 console.log(output);
+				 $('#nameTb').val(output.data[1]);
+				 $('#occupantTb').val(output.data[3]);
+				 $('#location_select').val(output.data[4]);
+				 $('#owner_select').val(output.data[2]);
+				 $('#idTb').val(id);
+				 $('#location_select').select2({});
+				 $('#owner_select').select2({});
+			 });
+		 }
+		 
+						function submitForm(){
+						   
+						   if(validate()){
+							  var newObj= new Object();
+							  var objArray = new Array();
+							  newObj.name=$("#nameTb").val();
+							  newObj.occupants=$("#occupantTb").val();
+							  newObj.location=$("#location_select").val();
+							  newObj.owner=$("#owner_select").val();
+							  newObj.id=$("#idTb").val();
+							  newObj.privilege_id=1;
+							  objArray.push(newObj);
+							  console.log(objArray)
+							  var postData=JSON.stringify(objArray);
+							  if(event=="add"){
+								 postBack("flats/addflats","postdata="+postData,function(response){
+									console.log(response);
+								   var json=JSON.parse(response);
+								   if(json.data){
+									   showSuccessMessage(json.message);
+									   resetForm();
+									   closeEntityModal();
+									   getAll();
+								   }
+								   
+							  });
+						   }
+						   else{
+							  console.log(newObj);
+							 postBack("flats/updateflats","postdata="+postData,function(response){
+									console.log(response);
+								   var json=JSON.parse(response);
+								   if(json.data){
+									   showSuccessMessage(json.message);
+									   resetForm();
+									   closeEntityModal();
+									   getAll();
+								   }
+								 });
+						 
+						
+						   }
+						
+						 
+						 }
+						}
+					
+							  
+					 
+		 
+		 
+					 </script>
+
+{% endblock %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block bodyclass %}
+ pace-done
+{% endblock %}
+
+{% block sidebar %}
+{% include "includes/navbar.html" %}
+{% include "includes/sidebar.html" %}
+{% endblock %}

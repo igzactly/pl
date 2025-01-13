@@ -1,0 +1,352 @@
+{% extends "includes/layout.html" %}
+{% block content %}
+<!-- Advanced login -->
+				
+					<div class="row">
+						<div class="col-md-12">
+						   <div class="panel panel-flat">
+							  <div id="entityPanel" class="panel-body">
+								 <div class="form-group">
+									<div class="row">
+									   <div class="col-md-12">
+										  <div class="form-group has-feedback has-feedback-left">
+											 <input type="text" class="search form-control input-lg" placeholder="Search Privilege Group By Name ">
+											 <div class="form-control-feedback">
+												<i class="icon-search4" style="margin-top: 10px;"></i>
+											 </div>
+										  </div>
+									   </div>
+									</div>
+								 </div>
+								 <div class="form-group">
+									<div class="row">
+									   <div class="col-md-12">
+										  <table class="table table-bordered table-hover table-condensed table-striped">
+											 <thead class="bg-tomato">
+												<tr>
+												   <th style="width:100px;"></th>
+												   <th>Name</th>
+												</tr>
+											 </thead>
+											 <tbody id="tableBody" class="list">
+											 </tbody>
+										  </table>
+									   </div>
+									</div>
+								 </div>
+							  </div>
+						   </div>
+						</div>
+					 </div>
+					 <!-- Modal!-->
+		   <div id="entity_modal" class="modal fade" data-backdrop="static" data-keyboard="false">
+						<div class="modal-dialog modal-md">
+						   <div class="modal-content">
+							  <div class="modal-header bg-maroon">
+								 <button type="button" class="close" onclick="closeEntityModal()">&times;</button>
+								 <h5 id="formTitle" class="modal-title"><span id="actionTb"> </span>Privilege Group </h5>
+							  </div>
+							  <form id="entityForm" action="#" class="form-horizontal">
+								 <div class="modal-body">
+									<div class="form-group">
+									   <label class="control-label col-sm-3">Privilege Name  <span class="text-danger">*</span></label>
+									   <div class="col-sm-9">
+										  <input id="privilegeNameTb" type="text" placeholder="Privilege Name" maxlength="15" class="form-control maxlength" >
+									   </div>
+									</div>
+									
+									<div class="row form-group adminActions">
+										<legend class="adminActions">
+											Admin Actions
+										</legend>
+										<input type="checkbox" class="js-switch viewAdminCb" id="viewAdminCb" name="viewAdminCb"  /> View
+										<input type="checkbox" class="js-switch"  id="addAdminCb" name="addAdminCb" /> Add 
+										<input type="checkbox" class="js-switch"  id="updateAdminCb" name="updateAdminCb"  /> Update
+										<input type="checkbox" class="js-switch" id="deleteRestoreAdminCb" name="deleteRestoreAdminCb" /> Delete / Restore
+										<input type="checkbox" class="js-switch" id="permanentlyDeleteAdminCb" name="permanentlyDeleteAdminCb" /> Permanently Delete
+
+									</div>
+									<div class="row form-group locationActions">
+										<legend class="locationActions">
+											Location  Actions
+										</legend>
+										<input type="checkbox" class="js-switch" id="viewLocationCb" name="viewLocationCb"  /> View
+										<input type="checkbox" class="js-switch"  id="addLocationCb" name="addLocationCb" /> Add 
+										<input type="checkbox" class="js-switch"  id="updateLocationCb" name="updateLocationCb"  /> Update
+										<input type="checkbox" class="js-switch" id="deleteRestoreLocationCb" name="deleteRestoreLocationCb" /> Delete / Restore
+										<input type="checkbox" class="js-switch" id="permanentlyDeleteLocationCb" name="permanentlyDeleteLocationCb" /> Permanently Delete
+									</div>
+									<div class="row form-group residentsAction">
+										<legend class="residentsAction">
+											Residents  Actions
+										</legend>
+										<input type="checkbox" class="js-switch" id="viewResidentsCb" name="viewResidentsCb"  /> View
+										<input type="checkbox" class="js-switch"  id="addResidentsCb" name="addResidentsCb" /> Add 
+										<input type="checkbox" class="js-switch"  id="updateResidenstCb" name="updateResidenstCb"  /> Update
+										<input type="checkbox" class="js-switch" id="deleteRestoreResidentsCb" name="deleteRestoreResidentsCb" /> Delete / Restore
+										<input type="checkbox" class="js-switch" id="permanentlyDeleteResidentsCb" name="permanentlyDeleteResidentsCb" /> Permanently Delete
+									</div>
+									<div class="row form-group visitorsAction">
+										<legend class="visitorsAction">
+											Visitors  Actions
+										</legend>
+										<input type="checkbox" class="js-switch" id="viewVisitorsCb" name="viewVisitorsCb"  /> View
+										<input type="checkbox" class="js-switch"  id="addVisitorsCb" name="addVisitorsCb" /> Add 
+										<input type="checkbox" class="js-switch"  id="updateVisitorsCb" name="updateVisitorsCb"  /> Update
+										<input type="checkbox" class="js-switch" id="deleteRestoreVistorsCb" name="deleteRestoreVistorsCb" /> Delete / Restore
+										<input type="checkbox" class="js-switch" id="permanentlyDeleteVisitorsCb" name="permanentlyDeleteVisitorsCb" /> Permanently Delete
+									</div>
+								 </div>
+								 <div class="modal-footer">
+									<input type="hidden" id="idTb" value="0"/>
+									<button type="reset" class="btn btn-default">Reset Form</button>
+									<button type="button" id="formButton" name="" onclick="submitForm()" class="btn btn-primary">Submit form</button>
+								 </div>
+							  </form>
+						   </div>
+						</div>
+					 </div>
+					
+{% endblock %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block bodyclass %}
+ pace-done
+{% endblock %}
+{% block scriptblock %}
+<script type="text/javascript">
+
+
+// function isNthBitSet(n, k)
+// 					{
+// 						if ((n & (1 << (k - 1))) > 0)
+// 							return true;
+// 						else
+// 							return false;
+// 					}
+function isKthBitSet(n,k){
+	if(n[k]==1){return true}
+	 else{return false;
+	}
+}
+
+
+					
+				
+						event="";
+						// Admin Varibales
+						var viewAdmin = $("#viewAdminCb").val() ? "1":"0"; // if checked then 1 else 0 
+						var addAdmin = $("#addAdminCb").val() ? "1":"0";
+						var updateAdmin = $("#updateAdminCb").val() ? "1":"0"; 
+						var deleteRestoreAdmin = $("#deleteRestoreAdminCb").val() ? "1":"0";
+						var permanentlyDeleteAdmin = $("#permanentlyDeleteAdminCb").val() ? "1":"0";
+						// Location Variables 
+						var viewLocation = $("#viewLocationCb").val() ? "1":"0";
+						var addLocation = $("#addLocationCb").val() ? "1":"0";
+						var updateLocation = $("#updateLocationCb").val() ?"1":"0";
+						var deleteRestoreLocation = $("#deleteRestoreLocationCb").val() ? "1":"0";
+						var permenantlyDeleteLocation = $("#permanentlyDeleteLocationCb").val() ? "1":"0";
+
+						
+						//Residents Variables
+						var viewResidents = $("#viewResidentsCb").val() ? "1":"0"; 
+						var addResidents = $("#addResidentsCb").val() ? "1":"0";
+						var updateResidents = $("#updateResidenstCb").val() ? "1":"0";
+						var deleteRestoreResidents = $("#deleteRestoreResidentsCb").val() ? "1":"0"; 
+						var permanentlyDeleteResidents = $("#permanentlyDeleteResidentsCb").val() ? "1":"0"; 
+
+						//Visitors Variables
+						var viewVisitors = $("#viewVisitorsCb").val() ? "1":"0";
+						var addViewVisitors = $("#addVisitorsCb").val() ? "1":"0";
+						var updateVisitors = $("#updateVisitorsCb").val() ? "1":"0";
+						var deleteRestoreVisitors = $("#deleteRestoreVistorsCb").val() ?  "1":"0";  
+						var permanentlyDeleteVisitors = $("#permanentlyDeleteVisitorsCb").val() ?"1":"0";
+
+
+						$(function(){
+								var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+								elems.forEach(function(html) {var switchery = new Switchery(html,{ size: 'small' });});
+							   $("#societyLink").click();
+							   $('#privilegesLink').addClass('active');
+							   getAll();
+							});
+						function validate(){
+						   
+						   return true;
+						}
+						function getAll(){
+						   var postdata="";
+						   postBack("admin/getAllPrivilegeGroups","postdata="+postdata,function(response){
+								 var json=JSON.parse(response);
+								 console.log(json);
+								 var output=json.data;
+								  $("#tableBody").html("");
+								   var html = "";
+								   for (var i = 0; i < output.length; i++) {
+		 
+									   var tableData = "<tr>";
+									   tableData += "<td><input id='cb" +output[i][0] + "' type='checkbox' name='selectRow' value='" + output[i][0] + "' style='height:20px;width:20px' />";
+		 
+									   if (output[i].flag == 1)
+										   tableData += '<span class="label label-flat label-icon text-danger" data-popup="tooltip" data-placement="bottom" title="Deleted" style="float:right; padding-top: 4px;"><i class="icon-trash"></i></span>';
+		 
+									   tableData += "<td class='nameClass'>" + output[i][1] + "</td>";
+									  
+									   
+									   
+									   tableData += "</tr>";
+									   $("#tableBody").append(tableData);
+								 }
+									applyFilterableList();
+									});
+						}
+						function applyFilterableList() {
+					  var options = {
+						  valueNames: ['nameClass', 'phoneClass']
+					  };
+					  var list = new List('entityPanel', options);
+				  }
+			function getEntityDetails() {
+			var id = $('input[name=selectRow]:checked:visible:first').val();
+				
+			 if (!id) {
+				 showErrorMessage("Please select the Privilege Group  you wish to update");
+				 return false;
+			 }
+			 var newObj= new Object();
+			 newObj.id=id;
+			 var objArray= new Array();
+			 objArray.push(newObj);
+			 $('#entity_modal').modal('show');
+			 postdata=JSON.stringify(objArray);
+			var postdata = JSON.stringify(objArray);
+			 postBack("admin/getPrivilegeGroupDetails", "postdata=" + postdata, function(response) {
+				 
+				 var output = JSON.parse(response);
+				 var privilegeBits=(output.data[2]);
+				 console.log(privilegeBits.toString(2));
+				 //viewAdmin is set
+				 if(isKthBitSet(privilegeBits,0)){ $("#viewAdminCb").trigger('click');  }
+				 if(isKthBitSet(privilegeBits,1)){ $("#addAdminCb").trigger('click');  }
+				 if(isKthBitSet(privilegeBits,2)){ $("#updateAdminCb").trigger('click');  }
+				 if(isKthBitSet(privilegeBits,3)){ $("#deleteRestoreAdminCb").trigger('click');  }
+				 if(isKthBitSet(privilegeBits,4)){ $("#permanentlyDeleteAdminCb").trigger('click');  }
+				 if(isKthBitSet(privilegeBits,5)){ $("#viewLocationCb").trigger('click');  }
+				 if(isKthBitSet(privilegeBits,6)){ $("#addLocationCb").trigger('click');  }
+				 if(isKthBitSet(privilegeBits,7)){ $("#updateLocationCb").trigger('click');  }
+				 if(isKthBitSet(privilegeBits,8)){ $("#deleteRestoreLocationCb").trigger('click');  }
+				 if(isKthBitSet(privilegeBits,9)){ $("#permanentlyDeleteLocationCb").trigger('click');  }
+				 if(isKthBitSet(privilegeBits,10)){ $("#viewResidentsCb").trigger('click');  }
+				 if(isKthBitSet(privilegeBits,11)){ $("#addResidentsCb").trigger('click');  }
+				 if(isKthBitSet(privilegeBits,12)){ $("#updateResidenstCb").trigger('click');  }
+				 if(isKthBitSet(privilegeBits,13)){ $("#deleteRestoreResidentsCb").trigger('click');  }
+				 if(isKthBitSet(privilegeBits,14)){ $("#permanentlyDeleteResidentsCb").trigger('click');  }
+				 if(isKthBitSet(privilegeBits,15)){ $("#viewVisitorsCb").trigger('click');  }
+				 if(isKthBitSet(privilegeBits,16)){ $("#addVisitorsCb").trigger('click');  }
+				 if(isKthBitSet(privilegeBits,17)){ $("#updateVisitorsCb").trigger('click');  }
+				 if(isKthBitSet(privilegeBits,20)){ $("#deleteRestoreVistorsCb").trigger('click');  }
+				 if(isKthBitSet(privilegeBits,21)){ $("#permanentlyDeleteVisitorsCb").trigger('click');  }
+				 console.log(privilegeBits);
+				 
+				 $('#privilegeNameTb').val(output.data[1]);
+				 $('#idTb').val(id);
+				 console.log(response);
+			 });
+		 }
+		 
+						function submitForm(){
+							
+							// var clickCheckbox = document.querySelector('#viewAdminCb');
+							// alert(clickCheckbox.checked);
+
+							
+
+						
+						// Admin Varibales
+						 viewAdmin = (document.querySelector('#viewAdminCb').checked) ? "1":"0"; // if checked then 1 else 0 
+						 addAdmin = (document.querySelector('#addAdminCb').checked) ? "1":"0";
+						 updateAdmin = (document.querySelector('#updateAdminCb').checked) ? "1":"0"; 
+						 deleteRestoreAdmin = (document.querySelector('#deleteRestoreAdminCb').checked) ? "1":"0";
+						 permanentlyDeleteAdmin =(document.querySelector('#permanentlyDeleteAdminCb').checked)  ? "1":"0";
+						// Location Variables 
+						 viewLocation = (document.querySelector('#viewLocationCb').checked)? "1":"0";
+						 addLocation = (document.querySelector('#addLocationCb').checked) ? "1":"0";
+						 updateLocation =(document.querySelector('#updateLocationCb').checked) ?"1":"0";
+						 deleteRestoreLocation = (document.querySelector('#deleteRestoreLocationCb').checked) ? "1":"0";
+						 permenantlyDeleteLocation = (document.querySelector('#permanentlyDeleteLocationCb').checked) ? "1":"0";
+
+						
+						//Residents Variables
+						 viewResidents =(document.querySelector('#viewResidentsCb').checked) ? "1":"0"; 
+						 addResidents = (document.querySelector('#addResidentsCb').checked) ? "1":"0";
+						 updateResidents = (document.querySelector('#updateResidenstCb').checked) ? "1":"0";
+						 deleteRestoreResidents = (document.querySelector('#deleteRestoreResidentsCb').checked) ? "1":"0"; 
+						 permanentlyDeleteResidents = (document.querySelector('#permanentlyDeleteResidentsCb').checked) ? "1":"0"; 
+
+						//Visitors Variables
+						 viewVisitors =(document.querySelector('#viewVisitorsCb').checked) ? "1":"0";
+						 addViewVisitors = (document.querySelector('#addVisitorsCb').checked) ? "1":"0";
+						 updateVisitors = (document.querySelector('#updateVisitorsCb').checked)  ? "1":"0";
+						 deleteRestoreVisitors = (document.querySelector('#deleteRestoreVistorsCb').checked) ?  "1":"0";  
+						 permanentlyDeleteVisitors =(document.querySelector('#permanentlyDeleteVisitorsCb').checked)  ?"1":"0";
+						   
+						   if(validate()){
+							  var newObj= new Object();
+							  var objArray = new Array();
+							  newObj.name=$("#privilegeNameTb").val();
+							  //crating a bit string of the privilege checkboxes
+							  var bitString=viewAdmin+addAdmin+updateAdmin+deleteRestoreAdmin+permanentlyDeleteAdmin+viewLocation+addLocation+updateLocation+deleteRestoreLocation+permenantlyDeleteLocation+viewResidents+addResidents+updateResidents+deleteRestoreResidents+permanentlyDeleteResidents+viewVisitors+addViewVisitors+updateVisitors+deleteRestoreVisitors+permanentlyDeleteVisitors;
+							  //console.log(parseInt(bitString,2));
+							  newObj.privilegeBits=bitString;
+							  newObj.id=$("#idTb").val();
+							  objArray.push(newObj);
+							  console.log(objArray)
+							  var postData=JSON.stringify(objArray);
+							  if(event=="add"){
+								 postBack("admin/addPrivilegeGroup","postdata="+postData,function(response){
+									console.log(response);
+								   var json=JSON.parse(response);
+								   if(json.data){
+									   showSuccessMessage(json.message);
+									   resetForm();
+									   closeEntityModal();
+									   getAll();
+								   }
+								   
+							  });
+						   }
+						   else{
+							  console.log(newObj);
+							 postBack("admin/updatePrivilegeGroup","postdata="+postData,function(response){
+									console.log(response);
+								   var json=JSON.parse(response);
+								   if(json.data){
+									   showSuccessMessage(json.message);
+									   resetForm();
+									   closeEntityModal();
+									   getAll();
+								   }
+								 });
+						 
+						
+						   }
+						
+						 
+						 }
+						}
+					
+							  
+					 
+		 
+		 
+					 </script>
+
+
+{% endblock %}
+{% block sidebar %}
+{% include "includes/navbar.html" %}
+{% include "includes/sidebar.html" %}
+{% endblock %}

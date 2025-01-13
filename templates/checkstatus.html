@@ -1,0 +1,181 @@
+{% extends "includes/layout.html" %}
+{% block content %}
+<!-- Advanced login -->
+				
+					<div class="row">
+						<div class="col-md-12">
+						   <div class="panel panel-flat">
+							  <div id="entityPanel" class="panel-body">
+								 <div class="form-group">
+									<div class="row">
+									   <div class="col-md-12">
+										  <div class="form-group has-feedback has-feedback-left">
+											 <input type="text" class="search form-control input-lg" placeholder="Search visits ">
+											 <div class="form-control-feedback">
+												<i class="icon-search4" style="margin-top: 10px;"></i>
+											 </div>
+										  </div>
+									   </div>
+									</div>
+								 </div>
+								 <div class="form-group">
+									<div class="row">
+									   <div class="col-md-12">
+										  <table class="table table-bordered table-hover table-condensed table-striped">
+											 <thead class="bg-tomato">
+												<tr>
+												   <th style="width:100px;"></th>
+												   <th>Visit ID</th>
+                                                   <th>Authorized by</th>
+                                                   <th>Resident ID</th>
+                                                   <th>Status</th>
+												</tr>
+											 </thead>
+											 <tbody id="tableBody" class="list">
+											 </tbody>
+										  </table>
+									   </div>
+									</div>
+								 </div>
+							  </div>
+						   </div>
+						</div>
+					 </div>
+					 <!-- Modal!-->
+		             <!-- Modal!-->
+  <div id="entity_modal" class="modal fade" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-md">
+       <div class="modal-content">
+          <div class="modal-header bg-maroon">
+             <button type="button" class="close" onclick="closeEntityModal()">&times;</button>
+             <h5 id="formTitle" class="modal-title"><span id="actionTb"> </span><?php echo $entity; ?></h5>
+          </div>
+       </div>
+    </div>
+ </div>
+ <script type="text/javascript">
+    event="";
+    $(function(){
+        $('#typeSelect').select2({
+// options
+});
+           $("#societyLink").click();
+           $('#locationsLink').addClass('active');
+           getAll();
+        });
+    function validate(){
+       
+       return true;
+    }
+
+    function getAll(){
+       var postdata="";
+       //postBack("URL","posdata="+postdata,function(response){});
+       postBack("visitor/getstatus","postdata="+postdata,function(response){
+             var json=JSON.parse(response);
+             var output=json.data;
+              $("#tableBody").html("");
+               var html = "";
+               for (var i = 0; i < output.length; i++) {
+
+                   var tableData = "<tr>";
+                   tableData += "<td><input id='cb" +output[i][0] + "' type='checkbox' name='selectRow' value='" + output[i][0] + "' style='height:20px;width:20px' />";
+
+                   if (output[i].flag == 1)
+                       tableData += '<span class="label label-flat label-icon text-danger" data-popup="tooltip" data-placement="bottom" title="Deleted" style="float:right; padding-top: 4px;"><i class="icon-trash"></i></span>';
+
+                   tableData += "<td class='visitIdClass'>" + output[i][0] + "</td>";
+                   
+                   tableData += "<td class='authorizedClass'>" + output[i][1] + "</td>";
+                   tableData += "<td class='residentClass'>" + output[i][2] + "</td>";
+
+                   if(parseInt(output[i][3])==0){
+                       tableData += "<td class='statusClass'> PENDING </td>";
+                   }
+				   else if(parseInt(output[i][3])==1){
+                       tableData += "<td class='statusClass'> AUTHORIZED </td>";
+                   }
+				   else{
+					   tableData += "<td class='statusClass'>FAILED</td>";
+				   }
+				   console.log(response);
+				   
+            
+                   tableData += "</tr>";
+                   $("#tableBody").append(tableData);
+             }
+                applyFilterableList();
+                });
+				setTimeout("getAll()",5000);
+    }
+    function applyFilterableList() {
+  var options = {
+      valueNames: ['visitIdClass']
+  };
+  var list = new List('entityPanel', options);
+}
+
+
+
+ </script>
+
+{% endblock %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block bodyclass %}
+ pace-done
+{% endblock %}
+{% block scriptblock %}
+<script>
+function validate(){  
+                    return true;
+							  }
+				
+                
+              function doLogin(){
+					var userId=$('#userID').val();
+					var userpass=$('#userPass').val();
+					if(validateUser()){
+						var objArray=new Array();
+						var newObj=new Object();
+						if(isNaN(userId)){
+							newObj.loginType=1; 
+						}else{
+							newObj.loginType=0;
+						}
+						newObj.userId=userId;
+						newObj.pass=userpass;
+						objArray.push(newObj);
+						var postdata = JSON.stringify(objArray);
+		            	blockPage();
+						
+						postBack("doLogin","postdata="+postdata, function(response){
+		                    console.log(response);
+		                    var json = JSON.parse(response);
+
+		                    if(json.data)
+		                    {
+		                        showSuccessMessage("Authentication Successful! Redirecting...");
+		                        window.location = "admin";
+		                    }
+		                    else {
+		                    	unblockPage();
+		                        showErrorMessage("Failed to login. " + json.message);
+		                        //grecaptcha.reset();
+		                    }
+		                });
+
+
+						}	
+					}
+					
+</script>
+
+{% endblock %}
+{% block sidebar %}
+
+{% include "includes/sidebarstatus.html" %}
+{% endblock %}

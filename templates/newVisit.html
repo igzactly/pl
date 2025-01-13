@@ -1,0 +1,436 @@
+{% extends "includes/layout.html" %}
+{% block content %}
+<style>
+.footer {
+    position: static;
+    /* bottom: 30px; */;
+	
+}
+.login-container .page-container .login-form {
+    width: 445px;
+}
+.btn-teal, .btn-teal:focus {
+    color: #fff;
+    background-color: #219187;
+    border-color: #219187;
+    outline: 0;
+    box-shadow: 0 0 0 0 rgb(71 179 169 / 50%);
+}
+.avatar-pic {
+width: 43px;
+border-radius:50px;
+}
+</style>
+<div class="page-container " style="min-height:609px">
+	<!-- Page content -->
+	<div class="page-content">
+		<!-- Advanced login -->
+		<!--	<div class="panel panel-body login-form" >
+							<div class="text-center">
+								<div class="icon-object border-warning-400 text-warning-400"><i class="icon-people"></i></div>
+								<h5 class="content-group-lg"> <small class="display-block">Enter your credentials</small></h5>
+							</div>
+
+							<div class="form-group has-feedback has-feedback-left">
+								<input type="text" class="form-control" placeholder="Email or Phone" id="userID">
+								<div class="form-control-feedback">
+									<i class="icon-user text-muted" style="margin-top: 10px;"> </i>
+								</div>
+							</div>
+
+							<div class="form-group has-feedback has-feedback-left">
+								<input type="password" class="form-control" placeholder="Password" id="userPass">
+								<div class="form-control-feedback">
+									<i class="icon-lock2 text-muted" style="margin-top: 10px;"></i>
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<button  class="btn bg-blue btn-block" onclick="doLogin()">Login <i class="icon-circle-right2 position-right"></i></button>
+							</div>
+
+						
+						</div>-->
+		<div class="panel panel-body login-form" >
+			<!-- Content area -->
+			<div class=" d-flex justify-content-center align-items-center">
+				<!-- Registration form -->
+				<!-- <form action="" class="flex-fill"> -->
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="card mb-0">
+								<div class="card-body">
+									<div class="text-center mb-3">
+										<h5 class="mb-0">Visitor's Information</h5>
+										<span class="d-block text-muted"/>
+									</div>
+									<div class="row">
+									<div class="col-lg-12">
+										<div class="form-group form-group-feedback form-group-feedback-right">
+												<input type="text" class="form-control maxlength" placeholder="Visitor Name" id="vName" maxlength="50" >
+											 </div>
+											 </div>
+									</div>
+									
+									<div class="row">
+										<div class="col-lg-6">
+											<div class="form-group form-group-feedback form-group-feedback-right">
+													<input type="text" class="form-control" placeholder="Email" id="vemail">
+														<div class="form-control-feedback">
+														
+													</div>
+													</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="form-group form-group-feedback form-group-feedback-right">
+													<input type="text" class="form-control" placeholder="Contact No" id="vphone">
+														<div class="form-control-feedback">
+														
+													</div>
+												</div>
+											</div>
+									</div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group form-group-feedback form-group-feedback-right">
+                                                    <input type="text" class="form-control" placeholder="Purpose Of Visit" id="purposeOfVisit"/>
+                                                 </div>
+                                                 </div>
+                                        </div>
+                                      
+                                        
+										</div>
+										<div class="row">
+											<div class="col-lg-6">
+	                                                <div class="form-group form-group-feedback form-group-feedback-right">
+		                                                 <input type="text" class="form-control" placeholder="Resedential Address" id="vaddress">
+		                                         	<div class="form-control-feedback">
+														
+													</div>
+		                                            </div>
+	                                        </div>
+												<div class="col-lg-6">
+													<label>
+															<!-- <input type="file" style="display:none"> -->
+															<input type="hidden" id="imagePath">
+																<img src="https://mdbootstrap.com/img/Photos/Others/placeholder-avatar.jpg" class="rounded-circle z-depth-1-half avatar-pic" alt="example placeholder avatar" id="visitorImage">
+                                                        </label>
+																<!-- <label >
+                                                                       Add Photo
+                                                                </label> -->
+																<button onclick="showCameraModal()"> Add Photo</button>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-lg-6">
+														
+													</div>
+															<div class="col-lg-6">
+												
+											                </div>
+												</div>
+														<div class="row">
+															<div class="col-lg-6">
+																<div class="form-group">
+																	<select data-placeholder="Select a Proof..." class="form-control select" data-fouc id="idProofType">
+																	
+																	<optgroup label="Select a Proof">
+																		<option value="1">Adhaar Card</option>
+																		<option value="2">Pan Card</option>
+																	</optgroup>
+																</select>
+															</div>
+														</div>
+														<div class="col-lg-6">
+															<div class="form-group form-group-feedback form-group-feedback-right">
+																<input type="text" class="form-control" placeholder="Enter Here" id="idProof">
+																	<div class="form-control-feedback">
+														
+												                	</div>
+															</div>
+														</div>
+														</div>
+                                                        <hr>
+														<div class="row">
+															<div class="text-center mb-3">
+																<h5 class="mb-0">Resident Information</h5>
+																<span class="d-block text-muted"/>
+															</div>
+															<div class="col-lg-6">
+																<div class="form-group form-group-feedback form-group-feedback-right">
+																	<input type="text" class="form-control" placeholder="Resident Name" id="rName">
+																		<div class="form-control-feedback">
+														
+													</div>
+																	</div>
+																</div>
+																<div class="col-lg-6">
+																	<div class="form-group">
+																		<select data-placeholder="Select a Resident building..." class="form-control select" id="locationAccessTb">
+																		
+																		<optgroup label="Resident Buildings" id="addedLocations">
+																			<option value="AZ">A</option>
+																			<option value="CO">B</option>
+																			<option value="ID">C</option>
+																			<option value="WY">D</option>
+																		</optgroup>
+																	</select>
+																</div>
+															</div>
+															<div class="col-lg-6">
+																<div class="form-group form-group-feedback form-group-feedback-right">
+																	<input type="text" class="form-control" placeholder="Resident Contact" id="rPhone"> 
+																		<div class="form-control-feedback">
+														
+													</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="card-footer bg-transparent text-right">
+															<button type="submit" class="btn btn-primary btn-labeled btn-labeled-right" onclick="submitData()">  Submit</button>
+															<button type="submit" class="btn btn-secondary btn-labeled btn-labeled-right"> Clear</button>
+														</div>
+													</div>
+												</div>
+											</div>
+										<!-- </form> -->
+										<!-- /registration form -->
+									</div>
+									<!-- /content area -->
+
+
+
+									<div id="entity_modal" class="modal fade" data-backdrop="static" data-keyboard="false">
+										<div class="modal-dialog modal-md">
+										   <div class="modal-content">
+											  <div class="modal-header bg-maroon">
+												 <button type="button" class="close" onclick="closeEntityModal()">&times;</button>
+												 <h5 id="formTitle" class="modal-title"><span id="actionTb"> </span> E-smile Plij </h5>
+											  </div>
+											  <!-- <div id="entityForm" action="#" class="form-horizontal">
+												 <div class="modal-body">
+													<button id="start-camera">Start Camera</button>
+													<video id="video" width="320" height="240" autoplay></video>
+													<button id="click-photo">Click Photo</button>
+													<canvas id="canvas" width="320" height="240"></canvas>
+												</div>
+											</div> -->
+
+
+											<div id="my_photo_booth">
+												<div id="my_camera">
+
+												</div>
+												<br>
+												<div id="results" style="display:none">
+													<!-- Your captured image will appear here... -->
+												</div>
+										
+												<!-- A button for taking snaps -->
+												<form>
+													<div id="pre_take_buttons">
+														<!-- This button is shown before the user takes a snapshot -->
+														<input type=button class="btn btn-success btn-squared" value="CAPTURE" onClick="preview_snapshot()">
+													</div>
+										
+													<div id="post_take_buttons" style="display:none">
+														<!-- These buttons are shown after a snapshot is taken -->
+														<input type=button class="btn btn-danger btn-squared responsive-width" value="&lt; AGAIN" onClick="cancel_preview()">
+														<input type=button class="btn btn-success btn-squared responsive-width" value="SAVE &gt;" onClick="save_photo()" style="font-weight:bold;">
+													</div>
+												</form>
+										
+											</div>
+
+
+										   </div>
+										</div>
+									 </div>
+
+{% endblock %}
+
+{% block title %}
+New Visitor
+{% endblock %}
+{% block bodyclass %}
+login-container bg-visit-form  pace-done
+{% endblock %}
+{% block scriptblock %}
+				
+<script>
+$( document ).ready(function() {
+    postBack("visitor/getAllBuildings","postdata=''",function(response){
+							$("#locationAccessTb").addClass("form-control select");
+							   $("#addedLocations").html('');
+							   var jsonData = JSON.parse(response);
+							   console.log(jsonData)
+							   var optionsData="";
+							   for(i=0;i<jsonData.data.length;i++){
+								optionsData += "<option value='"+jsonData.data[i][0]+"'>"+jsonData.data[i][1]+"</option>";
+
+							   }
+							   $("#addedLocations").html(optionsData);
+						   });
+
+
+				
+});
+
+function validate(){  return true;}
+			
+function showCameraModal(){
+	$("#entity_modal").modal('show');
+	Webcam.set({
+                // live preview size
+                width: 320,
+                height: 240,
+
+                // device capture size
+                dest_width: 640,
+                dest_height: 480,
+
+                // final cropped size
+                crop_width: 480,
+                crop_height: 480,
+
+                // format and quality
+                image_format: 'jpeg',
+                jpeg_quality: 90,
+
+                // flip horizontal (mirror mode)
+                flip_horiz: true
+            });
+            Webcam.attach( '#my_camera' );
+}
+
+
+
+
+
+
+ function submitData(){
+
+if(validate()){
+            var features= new Object(); 
+             var newObj= new Object();
+              var newObj1=new Object();
+              var objArray = new Array();
+			  var idProof=$("#idProof").val();
+			  var idProofType = $("#idProofType").val();
+              newObj.vname=$("#vName").val();
+              newObj.vemail=$("#vemail").val();
+              newObj.vphone=$("#vphone").val();
+			  newObj.vaddress=$("#vaddress").val();
+              newObj.resident_name=$("#rName").val();
+              newObj.resident_phone=$("#rPhone").val();
+              newObj.location=$("#locationAccessTb").val();
+			  newObj.idProofType=idProofType;
+			  newObj.idProof= idProof;
+              //newObj.saveVisitorData=$("#myCheck").is(':checked');
+			  newObj.saveVisitorData=false;
+              newObj.purpose_of_visit=$("#purposeOfVisit").val();
+			  newObj.visitorPhoto= $('#imagePath').val();
+              
+objArray.push(newObj);
+console.log(objArray);
+//return false;
+var postData=JSON.stringify(objArray);
+if(event=="add"){
+postBack("visitor/newvisit","postdata="+postData,function(response){
+console.log(response);
+var json=JSON.parse(response);
+if(json.data){
+showSuccessMessage(json.message);
+resetForm();
+closeEntityModal();
+getAll();
+}
+
+});
+}
+else{
+console.log(newObj);
+postBack("visitor/newvisit","postdata="+postData,function(response){
+console.log(response);
+var json=JSON.parse(response);
+if(json.data){
+showSuccessMessage(json.message);
+location.reload();
+resetForm();
+closeEntityModal();
+getAll();
+}
+});
+
+
+}
+
+
+}
+
+}     
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+    function preview_snapshot() {
+        // play sound effect
+        try { shutter.currentTime = 0; } catch(e) {;} // fails in IE
+       // shutter.play();
+
+        // freeze camera so user can preview current frame
+        Webcam.freeze();
+
+        // swap button sets
+        document.getElementById('pre_take_buttons').style.display = 'none';
+        document.getElementById('post_take_buttons').style.display = '';
+    }
+
+    function cancel_preview() {
+        // cancel preview freeze and return to live camera view
+        Webcam.unfreeze();
+
+        // swap buttons back to first set
+        document.getElementById('pre_take_buttons').style.display = '';
+        document.getElementById('post_take_buttons').style.display = 'none';
+    }
+
+    function save_photo() {
+        // actually snap photo (from preview freeze).
+        Webcam.snap( function(data_uri) {
+            // display results in page
+            
+
+            // shut down camera, stop capturing
+            Webcam.reset();
+
+            $.getJSON('visitor/savephoto', {
+                photo_cap: data_uri,
+            },function(data){
+				console.log(data)
+                var photoPath = data.photoPath
+				$("#imagePath").val(photoPath);
+				console.log(photoPath);
+				$("#visitorImage").attr("src",data_uri);
+
+				closeEntityModal();
+            });
+
+        } );
+    }
+					
+</script>
+
+{% endblock %}

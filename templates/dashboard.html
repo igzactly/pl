@@ -1,0 +1,92 @@
+{% extends "includes/layout.html" %}
+{% block content %}
+
+
+
+					<!-- Advanced login -->
+				
+						<div class="panel panel-body login-form" >
+							
+						<h1>Dashboard ! </h1>
+						</div>
+
+
+{% endblock %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block bodyclass %}
+ pace-done
+{% endblock %}
+{% block scriptblock %}
+<script>
+function validateUser(){  return true;
+							  var userId=$('#userID').val();
+							  var userpass=$('#userPass').val();
+							  if(!userId){
+							    showErrorMessage('Please Enter Your User ID !');
+							    return false;
+							  }
+							  if (!isNaN(userId)){
+							  	if(!validateMobileNo(userId,"Enter A Valid Phone Number")){
+							  		return false
+							  	}
+							  }
+							  if(isNaN(userId)){
+							  	if(!validateEmail(userId,"Enter A Valid Email Address !")){
+							  		return false;
+							  	}
+							  }
+							  if(!userpass){
+							    showErrorMessage('You did not  enter a password !');
+							    return false;
+							  }
+							
+
+							}
+				function doLogin(){
+					var userId=$('#userID').val();
+					var userpass=$('#userPass').val();
+					if(validateUser()){
+						var objArray=new Array();
+						var newObj=new Object();
+						if(isNaN(userId)){
+							newObj.loginType=1; 
+						}else{
+							newObj.loginType=0;
+						}
+						newObj.userId=userId;
+						newObj.pass=userpass;
+						objArray.push(newObj);
+						var postdata = JSON.stringify(objArray);
+		            	blockPage();
+						
+						postBack("doLogin","postdata="+postdata, function(response){
+		                    console.log(response);
+		                    var json = JSON.parse(response);
+
+		                    if(json.data)
+		                    {
+		                        showSuccessMessage("Authentication Successful! Redirecting...");
+		                        window.location = "admin";
+		                    }
+		                    else {
+		                    	unblockPage();
+		                        showErrorMessage("Failed to login. " + json.message);
+		                        //grecaptcha.reset();
+		                    }
+		                });
+
+
+						}	
+					}
+					
+</script>
+
+{% endblock %}
+{% block sidebar %}
+{% include "includes/navbar.html" %}
+{% include "includes/sidebar.html" %}
+{% endblock %}

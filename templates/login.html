@@ -1,0 +1,111 @@
+{% extends "includes/layout.html" %}
+{% block content %}
+
+<div class="page-container" style="min-height:609px">
+	<!-- Page content -->
+	<div class="page-content">
+		<!-- Advanced login -->
+		<div class="panel panel-body login-form" >
+							<div class="text-center">
+								<div class="icon-object border-warning-400 text-warning-400"><i class="icon-people"></i></div>
+								<h5 class="content-group-lg"> <small class="display-block">Enter your credentials</small></h5>
+							</div>
+
+							<div class="form-group has-feedback has-feedback-left">
+								<input type="text" class="form-control" placeholder="Email or Phone" id="userID">
+								<div class="form-control-feedback">
+									<i class="icon-user text-muted" style="margin-top: 10px;"> </i>
+								</div>
+							</div>
+
+							<div class="form-group has-feedback has-feedback-left">
+								<input type="password" class="form-control" placeholder="Password" id="userPass">
+								<div class="form-control-feedback">
+									<i class="icon-lock2 text-muted" style="margin-top: 10px;"></i>
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<button  class="btn bg-blue btn-block" onclick="doLogin()">Login <i class="icon-circle-right2 position-right"></i></button>
+							</div>
+
+						
+						</div>
+
+
+{% endblock %}
+
+{% block title %}
+Login Administrator
+{% endblock %}
+{% block bodyclass %}
+login-container bg-bg1  pace-done
+{% endblock %}
+{% block scriptblock %}
+				
+<script>
+function validateUser(){  
+							  var userId=$('#userID').val();
+							  var userpass=$('#userPass').val();
+							  if(!userId){
+							    showErrorMessage('Please Enter Your User ID !');
+							    return false;
+							  }
+							  if (!isNaN(userId)){
+							  	if(!validateMobileNo(userId,"Enter A Valid Phone Number")){
+							  		return false
+							  	}
+							  }
+							  if(isNaN(userId)){
+							  	if(!validateEmail(userId,"Enter A Valid Email Address !")){
+							  		return false;
+							  	}
+							  }
+							  if(!userpass){
+							    showErrorMessage('You did not  enter a password !');
+							    return false;
+							  }
+							
+
+							}
+				function doLogin(){
+					var userId=$('#userID').val();
+					var userpass=$('#userPass').val();
+					if(validateUser()){
+						var objArray=new Array();
+						var newObj=new Object();
+						if(isNaN(userId)){
+							newObj.loginType=1; 
+						}else{
+							newObj.loginType=0;
+						}
+						newObj.userId=userId;
+						newObj.pass=userpass;
+						objArray.push(newObj);
+						var postdata = JSON.stringify(objArray);
+		            	blockPage();
+						
+						postBack("doLogin","postdata="+postdata, function(response){
+		                    console.log(response);
+		                    var json = JSON.parse(response);
+
+		                    if(json.data)
+		                    {
+		                        showSuccessMessage("Authentication Successful! Redirecting...");
+		                        window.location = "admin";
+		                    }
+		                    else {
+		                    	unblockPage();
+		                        showErrorMessage("Failed to login. " + json.message);
+		                        //grecaptcha.reset();
+		                    }
+		                });
+
+
+						}	
+					}
+					
+</script>
+
+{% endblock %}
