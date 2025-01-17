@@ -6,7 +6,7 @@ db = pymysql.connect(host="localhost",user="root",password="",database="patientl
 db.autocommit(True)
 cur = db.cursor()
 def get(id):
-    query="select id,name,phone,email,privilege_id,location_access from admin where id = '{}'"
+    query="select a.id, a.name,a.email,a.phone, pg.priv_id from admin a inner join privilege_group pg on a.privilege_id = pg.priv_id where a.id = '{}'"
     cur.execute(query.format(id))
     return cur.fetchone()
         
@@ -30,19 +30,17 @@ def doLogin(loginType,name,password):
         return False
 def getAllAdmin():
     try:
-        query="select id,name,phone,email from admin where id not in(1)"
+        query="select a.id, a.name, pg.priv_name from admin a inner join privilege_group pg on a.privilege_id = pg.priv_id"
         cur.execute(query)
         output = cur.fetchall()
         return output
-    except Exception:
-        return False
-def add(name,phone,email,privilege_id,location):
+    except Exception as error:
+        return str(error)
+def add(name,phone,email,privilege_id):
     try:
-        query="SELECT features FROM app_config"
-        cur.execute(query)
-        features=json.loads((cur.fetchone()[0]))
-        query="insert into admin(name,phone,email,password,privilege_id,location_access) values('{}','{}','{}',(SELECT MD5('{}')),'{}','{}')"
-        cur.execute(query.format(name,phone,email,features["defaultAdminPassword"]+phone,privilege_id,location))
+        defaultPass="abcd1234"
+        query="insert into admin(name,phone,email,password,privilege_id) values('{}','{}','{}',(SELECT MD5('{}')),'{}')"
+        cur.execute(query.format(name,phone,email,defaultPass,privilege_id))
         return True
     except Exception as e:
         print(e.args)
@@ -53,10 +51,10 @@ def permamentDelete():
     return None
 def restore():
     return None
-def update(id,name,phone,email,privilege_id,location_access):
+def update(id,name,phone,email,privilege_id):
     try:
-        query="update admin set name='{}',phone ='{}',email='{}',privilege_id='{}',location_access='{}' where id='{}'"
-        cur.execute(query.format(name,phone,email,privilege_id,location_access,id))
+        query="update admin set name='{}',phone ='{}',email='{}',privilege_id='{}' where id='{}'"
+        cur.execute(query.format(name,phone,email,privilege_id,id))
         return True
     except Exception:
         return False
@@ -74,7 +72,7 @@ def addPrivilegeGroup(name,privilegeBits):
 
 def getAllPrivilegeGroups():
     try:
-        query="select id,name from privilege_group"
+        query="select id,name from privilege_group;"
         cur.execute(query)
         output = cur.fetchall()
         return output
@@ -83,7 +81,7 @@ def getAllPrivilegeGroups():
 
 def getAllActivePrivilegeGroups():
     try:
-        query="select id,name from privilege_group where disabled = 0"
+        query="select priv_id,priv_name from privilege_group where priv_disabled = 0"
         cur.execute(query)
         output = cur.fetchall()
         return output

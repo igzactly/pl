@@ -1,8 +1,13 @@
 {% extends "includes/layout.html" %}
+{% block appjs %}
+
+<script  type="text/javascript" src="{{url_for('static', filename='js/app/admin.js') }}"></script>
+{% endblock  %}
+{% block angularcontrollerblock %}AdminController{% endblock  %}
 {% block content %}
 <!-- Advanced login -->
 				
-					<div class="row">
+					<div class="row"  >
 						<div class="col-md-12">
 						   <div class="panel panel-flat">
 							  <div id="entityPanel" class="panel-body">
@@ -26,12 +31,16 @@
 												<tr>
 												   <th style="width:100px;"></th>
 												   <th>Name</th>
-												   <th>Phone </th>
-												   <th>Email </th>
-												   
-												</tr>
-											 </thead>
+												   <th>Access Group </th>
+												   </tr>
+											</thead>
 											 <tbody id="tableBody" class="list">
+												<tr ng-repeat="admin in admins">
+													<td><input id="cb{a admin[0] a}" type="radio" name="selectRow" value="{a admin[0] a}" style="height:20px;width:20px" ng-click="selectAdmin(admin[0])" /></td>
+													<td>{a admin[1] a}</td>
+													<td>{a admin[2] a}</td>
+													
+												</tr>
 											 </tbody>
 										  </table>
 									   </div>
@@ -54,52 +63,38 @@
 									<div class="form-group">
 									   <label class="control-label col-sm-3">Admin Name  <span class="text-danger">*</span></label>
 									   <div class="col-sm-9">
-										  <input id="nameTb" type="text" placeholder="Administrator Name" maxlength="12" class="form-control maxlength" >
+										  <input id="nameTb" type="text" placeholder="Administrator Name" maxlength="12" class="form-control maxlength" ng-model= "adminName" >
 									   </div>
 									</div>
 									<div class="form-group">
 									   <label class="control-label col-sm-3">Admin Email  <span class="text-danger">*</span></label>
 									   <div class="col-sm-9">
-										  <input id="emailTb" type="text" placeholder="Administrator Email" maxlength="30" class="form-control maxlength" >
+										  <input id="emailTb" type="text" placeholder="Administrator Email" maxlength="30" class="form-control maxlength"  ng-model= "adminEmail"  >
 									   </div>
 									</div>
 								 <div class="form-group">
 									   <label class="control-label col-sm-3">Admin Phone  <span class="text-danger">*</span></label>
 									   <div class="col-sm-9">
-										  <input id="phoneTb" type="number" placeholder="Administrator Phone" maxlength="12" class="form-control maxlength" >
+										  <input id="phoneTb" type="text" placeholder="Administrator Phone" maxlength="12" class="form-control maxlength"  ng-model= "adminPhone"  >
 									   </div>
 									</div>
 									<div class="form-group">
-										<label class="control-label col-sm-3">Privilege Group  <span class="text-danger">*</span></label>
+										<label class="control-label col-sm-3">Access Group  <span class="text-danger">*</span></label>
 										<div class="col-sm-9">
-										  <select class="form-comtrol form-select form-select-lg mb-3" id="prvilegeGroupTb">
-
+										  <select class="form-comtrol form-select form-select-lg mb-3" id="prvilegeGroupTb"  ng-model= "adminPriv" >
+											<option  ng-repeat="privilegegroup in privilegegroups"  ng-value="{a privilegegroup[0] a}" > {a privilegegroup[1] a} </option>
 										 </select>
 
 										</div>
 									 </div>
-									 <div class="form-group">
-										<label class="control-label col-sm-3">Location Access  <span class="text-danger">*</span></label>
-										<div class="col-sm-9">
-										  <select class="form-comtrol form-select form-select-lg mb-3" id="locationAccessTb">
-											<optgroup label="Defaults">
-												<option value="0"> ALL LOCATION ACCESS</option>
-											</optgroup>
-											<optgroup label="Added Locations" id="addedLocations">
-												
-											</optgroup>
-										 </select>
 
-										</div>
-									 </div>
-									
 									
 									
 								 </div>
 								 <div class="modal-footer">
 									<input type="hidden" id="idTb" value="0"/>
 									<button type="reset" class="btn btn-default">Reset Form</button>
-									<button type="button" id="formButton" name="" onclick="submitForm()" class="btn btn-primary">Submit form</button>
+									<button type="button" id="formButton" name="" ng-click="submitForm()" class="btn btn-primary">Submit form</button>
 								 </div>
 							  </form>
 						   </div>
@@ -144,62 +139,11 @@
 						   
 						   return true;
 						}
-						postBack("visitor/getAllLocations","postdata=''",function(response){
-							$("#locationAccessTb").addClass("form-control select");
-							   $("#addedLocations").html('');
-							   var jsonData = JSON.parse(response);
-							   console.log(jsonData)
-							   var optionsData="";
-							   for(i=0;i<jsonData.data.length;i++){
-								optionsData += "<option value='"+jsonData.data[i][0]+"'>"+jsonData.data[i][1]+"</option>";
-
-							   }
-							   $("#addedLocations").html(optionsData);
-						   });
+				
 						function getAll(){
-						   var postdata="";
-						   postBack("admin/getAllAdmins","postdata="+postdata,function(response){
-								 var json=JSON.parse(response);
-								 console.log(json);
-								 var output=json.data;
-								  $("#tableBody").html("");
-								   var html = "";
-								   for (var i = 0; i < output.length; i++) {
-		 
-									   var tableData = "<tr>";
-									   tableData += "<td><input id='cb" +output[i][0] + "' type='checkbox' name='selectRow' value='" + output[i][0] + "' style='height:20px;width:20px' />";
-		 
-									   if (output[i].flag == 1)
-										   tableData += '<span class="label label-flat label-icon text-danger" data-popup="tooltip" data-placement="bottom" title="Deleted" style="float:right; padding-top: 4px;"><i class="icon-trash"></i></span>';
-		 
-									   tableData += "<td class='nameClass'>" + output[i][1] + "</td>";
-									   tableData += "<td class='phoneClass'>" + output[i][2] + "</td>";
-									   tableData += "<td >" + output[i][3] + "</td>";
-									   
-									   tableData += "</tr>";
-									   $("#tableBody").append(tableData);
-								 }
-									applyFilterableList();
-									});
+						  return true;
 						}
-						postBack("admin/getAllActivePrivilegeGroups","postdata=''",function(response){
-								 var json=JSON.parse(response);
-								 console.log(json);
-								 var output=json.data;
-								 console.log(output);
-								  $("#prvilegeGroupTb").html("");
-								  $("#prvilegeGroupTb").addClass("form-control select");
 
-								   var html = "";
-								   for (var i = 0; i < output.length; i++) {
-		 
-									     var selectData = "<option class='form-control' value='"+output[i][0]+"'>";
-											selectData+=output[i][1];
-											selectData+="</option>";
-										 $("#prvilegeGroupTb").append(selectData);
-								 }
-									applyFilterableList();
-									});
 						
 			function applyFilterableList() {
 					  var options = {

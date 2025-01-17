@@ -36,21 +36,20 @@
                     <li id="appConfigLink"><a href="admin/appconfig" target=""><i class="icon-gear"></i> <span>App Config</span></a></li>
                    
                     <li >
-                        <a href="#" class="has-ul" id="societyLink"><i class="icon-copy"></i> <span>Society Management</span></a>
+                        <a href="#" class="has-ul" id="societyLink"><i class="icon-copy"></i> <span>User Management</span></a>
                         <ul class="hidden-ul">
                             <li  id="administratorsLink"><a href="admin/allAdmins"><i class="icon-user"></i>Administrators</a></li>
-                            <li  id="privilegesLink"><a href="admin/privilegegroups"><i class="icon-user"></i>Privilege Groups</a></li>
-                            <li id="locationsLink"><a href="location" ><i class="icon-pin"></i>Locations</a></li>
-                            <li id="buildingsLink"><a href="flats" ><i class="icon-pin"></i>Flats</a></li>
-                            <li id="residentsLink"><a href="residents" ><i class="icon-pin"></i>Residents</a></li>
+                            <li  id="privilegesLink"><a href="admin/privilegegroups"><i class="icon-user"></i>Access Groups</a></li>
+                            <li id="patientsLink"><a href="patients" ><i class="icon-pin"></i>Patients</a></li>
                         </ul>
                     </li>
                     <li >
-                        <a href="#" class="has-ul" id="societyLink"><i class="icon-copy"></i> <span>Visitor Management</span></a>
+                        <a href="#" class="has-ul" id="societyLink"><i class="icon-copy"></i> <span>Case Management</span></a>
                         <ul class="hidden-ul">
                             
-                            <li id="locationsLink"><a href="visitor/allvisits" ><i class="icon-pin"></i><i class='fas fa-broadcast-tower' style='font: size 12px;color:red'></i>Visits</a></li>
-                            <li id="locationsLink"><a href="visitor/allvisitors" ><i class="icon-pin"></i>Visitors</a></li>
+                            <li id="casesLink"><a href="case/allcases" ><i class="icon-pin"></i><i class='fas fa-broadcast-tower' style='font: size 12px;color:red'></i>Cases</a></li>
+                            <li id="reportsLink"><a href="reports/allreports" ><i class="icon-pin"></i>Reports</a></li>
+                            <li id="paymentsLink"><a href="payments/allpayments" ><i class="icon-pin"></i>Payments</a></li>
                         </ul>
                     </li>
                     <!-- /page kits -->
@@ -74,8 +73,9 @@ background:#AAA9BC;">
 
             <div class="col-sm-8" id="btns">
                 
-                <button type="button" class="btn bg-maroon btn-labeled btn-xs" onclick="loadModal('Add');"><b><i class=" icon-plus-circle2"></i></b>Add </button>
-                <button type="button" class="btn bg-maroon btn-labeled btn-xs" onclick="loadModal('Update');"><b><i class="icon-pencil"></i></b>Update</button>
+                <button type="button" class="btn bg-maroon btn-labeled btn-xs" ng-click="loadModal(1)"><b><i class=" icon-plus-circle2"></i></b>Add </button>
+                <button type="button" class="btn bg-maroon btn-labeled btn-xs" ng-click="getDetails()"><b><i class="icon-pencil"></i></b>Update</button>
+                <!-- <button type="button" class="btn bg-maroon btn-labeled btn-xs" onclick="loadModal('Update');"><b><i class="icon-pencil"></i></b>Update</button> -->
                 <button type="button" class="btn bg-maroon btn-labeled btn-xs"><b><i class="icon-stop"></i></b>Disable</button>
                 <button type="button"  class="btn bg-maroon btn-labeled btn-xs"><b><i class="icon-reload-alt"></i></b> Restore</button>
                 <button type="button" class="btn bg-maroon btn-labeled btn-xs"><b><i class="icon-trash"></i></b> Permanently Delete</button>

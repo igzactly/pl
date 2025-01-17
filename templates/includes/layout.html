@@ -6,7 +6,10 @@
 	<title> {% block title %}{% endblock %}</title>
 	
 	 <base href="../" > 
-	<!-- Global stylesheets -->
+<!-- Angular  JS -->
+	 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js" integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular-csp.css" integrity="sha512-f7WVHp6iaZ7iOx9duYm67KLwCFJ9KirfMIK0MAOxf1wq5M8Ogdw5ljbCxlk/BtWIbyXWMsIaDaqwUpXttPQ/5g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	 <!-- Global stylesheets -->
 	<link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
 	<link href="{{url_for('static', filename='css/bootstrap.css') }}" rel="stylesheet" type="text/css">
 	<link href="{{url_for('static', filename='css/core.css') }}" rel="stylesheet" type="text/css">
@@ -51,13 +54,13 @@
 	<script  type="text/javascript" src="{{url_for('static', filename='js/custom/global.js')}}"></script>
 	<script  type="text/javascript" src="{{url_for('static', filename='js/custom/list.js') }}"></script>
 	<script  type="text/javascript" src="{{url_for('static', filename='js/custom/jquery.growl.js') }}"></script>
-	
+	{% block appjs %}{% endblock %}
 	
 
 	
 </head>
     
-<body class="{% block bodyclass %}{% endblock %}"></body>
+<body class="{% block bodyclass %}{% endblock %}" ng-app="myApp" ng-controller="{% block angularcontrollerblock %}{% endblock %}"></body>
 
 
 
@@ -71,7 +74,7 @@
 				<!-- Footer -->
 				
 				<div class="footer text-muted text-center">
-					&copy; 2021. <a href="#">Society Management System </a> by <a href="https://smartitcentre.com/" target="_blank">Smart ItCentre</a>
+					&copy; 2024. <a href="#">Patient Lens </a> by <a href="" target="_blank">Ignatius Gonsalves</a>
 				</div>
 				<!-- /footer -->
 

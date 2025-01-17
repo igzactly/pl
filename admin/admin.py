@@ -25,9 +25,8 @@ def privilegegroups():
 
 @admin.route("/addAdmin",methods=["POST"])
 def addAdmin():
-    data=request.form["postdata"]
-    userData=json.loads(data[1:-1])
-    response={"data":admin_model.add(userData["name"],userData["phone"],userData["email"],userData["privilege_id"],userData["location"]),"message":"Admin Added successfully !"}
+    userData=request.json
+    response={"data":admin_model.add(userData["name"],userData["phone"],userData["email"],userData["priv"]),"message":"Admin Added successfully !"}
     return json.dumps(response)
 
 
@@ -36,26 +35,28 @@ def addAdmin():
 
 @admin.route("/updateAdmin",methods=["POST"])
 def updateAdmin():
-    data=request.form["postdata"]
-    userData=json.loads(data[1:-1])
-    response={"data":admin_model.update(userData["id"],userData["name"],userData["phone"],userData["email"],userData["privilege_id"],userData["location"]),"message":"Admin Updated successfully !"}
+    userData=request.json
+    response={"data":admin_model.update(userData["id"],userData["name"],userData["phone"],userData["email"],userData["priv"]),"message":"Admin Updated successfully !"}
     return json.dumps(response)
 
-@admin.route("/getAllAdmins",methods=['POST'])
+@admin.route("/getAllAdmins",methods=['GET'])
 def getAllAdmins():
-    response={"data":admin_model.getAllAdmin(),"message":"Admin fecthed successfully !"}
-    return json.dumps(response)
+    try:
+        response=admin_model.getAllAdmin()
+        return json.dumps(response)
+    except Exception as error:
+        response = {"message":error}
+        return json.dumps(response) 
+        
 
 @admin.route("/getAdminDetails",methods=['POST'])
 def getAdminDetails():
     try:
-        data=request.form["postdata"]
-        userData=json.loads(data[1:-1])
-        print(userData)
-        response={"data":admin_model.get(userData["id"]),"message":"Login Successful !"}
+        data=request.json
+        response={"data":admin_model.get(data["id"]),"message":"Admin Data Fetched Successfully !"}
         return json.dumps(response)
     except Exception as e:
-        print(e.message, e.args)
+        print(str(e))
         return False
 
 @admin.route("/disableAdmin",methods=['POST'])
@@ -80,9 +81,9 @@ def getAllPrivilegeGroups():
     response={"data":admin_model.getAllPrivilegeGroups(),"message":"Admin fecthed successfully !"}
     return json.dumps(response)
 
-@admin.route("/getAllActivePrivilegeGroups",methods=['POST'])
+@admin.route("/getAllActivePrivilegeGroups",methods=['GET'])
 def getAllActivePrivilegeGroups():
-    response={"data":admin_model.getAllActivePrivilegeGroups(),"message":"Admin fecthed successfully !"}
+    response={"data":admin_model.getAllActivePrivilegeGroups(),"message":"All Active Access Groups fecthed successfully !"}
     return json.dumps(response)
 
 

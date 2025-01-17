@@ -124,7 +124,7 @@
   color: #fff;
 }
 .bg-maroon{
-   background-color:   #bb102b;
+   background-color: teal;
   border-color: maroon;
   color: #fff;
 
@@ -157,8 +157,8 @@
   min-height: 100%;
 }
 .bg-tomato{
-  background-color: #bb102b;
-  border-color: #FF8A65;
+  background-color:	#b077ba;
+  border-color:white;
   color: #fff;
 }
 .bg-warning-300 {
